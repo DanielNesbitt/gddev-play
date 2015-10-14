@@ -1,4 +1,4 @@
 @()(content: Html)
 <pre><code data-trim contenteditable>
-@content
+@HtmlFormat.escape(content.toString())
 </code></pre>

@@ -141,4 +141,16 @@ public Result index() {
         }
     }
 
+    @section() {
+        <h2>Asynchronous Responses</h2>
+        @code() {
+public Promise<Result> list() {
+    return Promise.promise(() -> {
+        Data data = RemoteService.list();
+        return ok(data);
+    });
+}
+        }
+    }
+
 }
