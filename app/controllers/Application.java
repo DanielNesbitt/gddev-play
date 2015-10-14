@@ -10,7 +10,4 @@ public class Application extends Controller {
         return ok(presentation.render());
     }
 
-    public Result foo() {
-        return play.mvc.Results.TODO;
-    }
 }

@@ -1,0 +1,144 @@
+@section() {
+
+    @section() {
+        <h1>MVC</h1>
+
+        <ul>
+            <li><b>Models</b> - persistence layer</li>
+            <li><b>Controllers</b> - logic layer</li>
+            <li><b>Views</b> - presentation layer</li>
+        </ul>
+    }
+
+    @section() {
+        <h1>Building web services</h1>
+    }
+
+    @section() {
+        <h2>Routes</h2>
+        <p>Defining API endpoints</p>
+
+        @code() {
+GET           /                controllers.Application.index()
+POST          /login           controllers.Application.login()
+
+GET           /user            controllers.Users.users()
+GET           /user/:id        controllers.Users.user(id)
+POST          /user            controllers.Users.createUser(id)
+PUT           /user/:id        controllers.Users.updateUser(id)
+DELETE        /user/:id        controllers.Users.deleteUser(id)
+        }
+    }
+
+    @section() {
+        <h2>Controllers</h2>
+        @code() {
+public class Users extends Controller {
+
+    public Result user(long id) {
+        User user = UserService.find(id);
+        return ok(Json.toJson(user));
+    }
+
+    public Result createUser(String id) {
+        JsonNode requestJson = request().body().asJson();
+        User newUser = Json.fromJson(requestJson, User.class);
+        User user = UserService.create(newUser);
+        return ok(Json.toJson(user));
+    }
+
+}
+        }
+    }
+
+    @section() {
+        <h2>Request - Query</h2>
+
+        @code() {
+            $.ajax("list?category=web&filter=java")
+        }
+
+        <p>Parsing query strings</p>
+
+        @code() {
+            public static Result list() {
+            String category = request().getQueryString("category");
+            String filter = request().getQueryString("filter");
+            return ok();
+            }
+        }
+    }
+
+    @section() {
+        <h2>Request - Body</h2>
+        @code() {
+public Result create() {
+    Http.RequestBody body = request().body();
+
+    String text = body.asText();
+    JsonNode jsonNode = body.asJson();
+    Document document = body.asXml();
+    Http.MultipartFormData formData = body.asMultipartFormData();
+
+    return ok();
+}
+        }
+        <p>Guesses the correct body parser based on Content-Type</p>
+    }
+
+    @section() {
+        <h2>Request - State</h2>
+
+        <p>State can be maintained on the client in a signed cookie.</p>
+
+        @code() {
+public static Result login() {
+    JsonNode request = request().body().asJson();
+    String user = request.get("user").asText();
+    String password = request.get("pass").asText();
+    if(LoginService.login(user, password)) {
+        session().put("user", user);
+        return ok();
+    }
+    return unauthorized("Invalid credentials.");
+}
+        }
+
+        @code() {
+public static Result list() {
+    String user = session("user");
+    return ok();
+}
+        }
+    }
+
+    @section() {
+        <h2>Response Codes</h2>
+        <p>ok() = 200</p>
+        <p>badRequest() = 400</p>
+        <p>notFound() = 404</p>
+        <p>etc..</p>
+    }
+
+    @section() {
+        <h2>Response</h2>
+        @code() {
+public Result user(long id) {
+    User user = UserService.find(id);
+    return ok(Json.toJson(user));
+}
+        }
+    }
+
+    @section() {
+        <h2>Response</h2>
+        @code() {
+public Result index() {
+    response().setHeader("response", "response-header");
+    return ok(new File("public/index.txt"))
+        .as("application/octet-stream");
+}
+        }
+    }
+
+}
