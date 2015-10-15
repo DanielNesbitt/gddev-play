@@ -9,7 +9,9 @@ scalaVersion := "2.11.6"
 libraryDependencies ++= Seq(
   javaJdbc,
   cache,
-  javaWs
+  javaWs,
+  "com.twitter" % "hbc-twitter4j" % "2.2.0",
+  "org.jooq" % "jool" % "0.9.7"
 )
 
 // Play provides two styles of routers, one expects its actions to be injected, the
