@@ -1,4 +1,7 @@
-This is your new Play application
-=================================
+## Play presentation
 
-This file will be packaged with your application, when using `activator dist`.
+Talk about the Play framework for the Genedata global developer meeting.
+
+Built using:
+* Play
+* Reveal.js
