@@ -11,7 +11,6 @@ import java.util.function.Function;
 /**
  * @author Daniel Nesbitt
  */
-@SuppressWarnings("SqlNoDataSourceInspection")
 public final class UserService {
 
     // ------------- Public -------------
