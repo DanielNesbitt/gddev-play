@@ -5,9 +5,8 @@ import models.User;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Result;
+import play.mvc.Results;
 import services.UserService;
-
-import java.util.List;
 
 /**
  * @author Daniel Nesbitt
@@ -17,20 +16,19 @@ public class Users extends Controller {
     // ------------- Actions -------------
 
     public Result users() {
-        List<User> users = UserService.list();
-        return ok(Json.toJson(users));
+        return Results.TODO;
     }
 
     public Result user(long id) {
-        return play.mvc.Results.TODO;
+        return Results.TODO;
     }
 
     public Result createUser() {
-        JsonNode ur = request().body().asJson();
+        JsonNode json = request().body().asJson();
         User user = UserService.create(
-            ur.get("username").asText(),
-            ur.get("forename").asText(),
-            ur.get("surname").asText()
+            json.get("username").asText(),
+            json.get("forename").asText(),
+            json.get("surname").asText()
         );
         return ok(Json.toJson(user));
     }
