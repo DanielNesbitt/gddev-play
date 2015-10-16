@@ -40,7 +40,7 @@ public class Users extends Controller {
         return ok(Json.toJson(user));
     }
 
-    public Result createUser(String id) {
+    public Result createUser() {
         JsonNode requestJson = request().body().asJson();
         User newUser = Json.fromJson(requestJson, User.class);
         User user = UserService.create(newUser);
@@ -61,11 +61,11 @@ public class Users extends Controller {
         <p>Parsing query strings</p>
 
         @code() {
-            public static Result list() {
-            String category = request().getQueryString("category");
-            String filter = request().getQueryString("filter");
-            return ok();
-            }
+public static Result list() {
+    String category = request().getQueryString("category");
+    String filter = request().getQueryString("filter");
+    return ok();
+}
         }
     }
 
