@@ -7,7 +7,8 @@ import play.GlobalSettings;
 public final class Global extends GlobalSettings {
 
     @Override
-    public void beforeStart(Application app) {
+    public void onStart(Application app) {
+
     }
 
 }

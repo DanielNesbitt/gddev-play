@@ -4,12 +4,13 @@
 
 # Home page
 GET           /                controllers.Application.index()
+GET           /demo            controllers.Application.demo()
+GET           /ws              controllers.Application.ws()
 
-GET           /user            controllers.Users.users()
-GET           /user/:id        controllers.Users.user(id)
-#POST          /user            controllers.Users.createUser(id)
-#PUT           /user/:id        controllers.Users.updateUser(id)
-#DELETE        /user/:id        controllers.Users.deleteUser(id)
+#GET           /user            controllers.Users.users()
+#GET           /user/:id        controllers.Users.user(id: Long)
+#POST          /user            controllers.Users.createUser()
+#DELETE        /user/:id        controllers.Users.deleteUser(id: Long)
 
 # Map static resources from the /public folder to the /assets URL path
 GET           /*file           controllers.Assets.versioned(path="/public", file: Asset)
