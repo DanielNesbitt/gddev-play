@@ -1,0 +1,11 @@
+.chart {
+    height: 70px;
+    width: 300px;
+    border-bottom: 1px solid #ccc;
+    display: block;
+    margin: 1em;
+}
+
+.chart .bar {
+    fill: #ccc;
+}
