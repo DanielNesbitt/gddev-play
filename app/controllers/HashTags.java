@@ -1,7 +1,6 @@
 package controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -11,6 +10,7 @@ import util.TweetSlurper;
 import java.util.Map;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collector;
 
 /**
  * @author Daniel Nesbitt
@@ -42,27 +42,12 @@ public class HashTags extends Controller {
     // ------------- Private -------------
 
     private static JsonNode toJson(Map<String, Integer> stats) {
-        ArrayNode labels = Json.newArray();
-        ArrayNode data = Json.newArray();
-
-        stats.forEach((k,v) -> {
-            labels.add(k);
-            data.add(v);
-        });
-
-        ObjectNode result = Json.newObject();
-        result.set("labels", labels);
-        result.set("datasets",
-            Json.newObject()
-                .put("label", "Top Tweets")
-                .put("fillColor", "rgba(220,220,220,0.5)")
-                .put("strokeColor", "rgba(220,220,220,0.8)")
-                .put("highlightFill", "rgba(220,220,220,0.75)")
-                .put("highlightStroke", "rgba(220,220,220,1)")
-                .set("data", data)
-        );
-
-        return result;
+        return stats.entrySet().stream()
+            .collect(Collector.of(
+                Json::newObject,
+                (node, e) -> node.put(e.getKey(), e.getValue()),
+                (n1, n2) -> (ObjectNode) n1.setAll(n2)
+            ));
     }
 
 }

@@ -12,17 +12,22 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
 
         <link rel="shortcut icon" type="image/png" href="@routes.Assets.versioned("images/favicon.png")">
-        <link rel="stylesheet" href="@routes.Assets.versioned("css/chart.css")">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.min.css">
     </head>
     <body>
 
-        <svg class="chart" data-bar-chart data-data="23,43,10,13,10,20,30,23,43,10,13,10,20,30" data-bar-width="15"></svg>
-        <svg class="chart" data-bar-chart data-data="19,65,23,31,32,44,5,32,23,23,54,65" data-bar-width="15"></svg>
-        <svg class="chart" data-bar-chart data-data="34,43,65,21,5,43,43,32,32,12,31,32,12,32,23,12" data-bar-width="15"></svg>
+        <div id="chart"></div>
 
         <script src="https://cdn.socket.io/socket.io-1.3.7.js"></script>
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+        <script src="http://cdn.pubnub.com/pubnub.min.js"></script>
         <script src="http://d3js.org/d3.v3.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/c3/0.4.10/c3.min.js"></script>
+
+        <script type="text/javascript" src="//pubnub.github.io/eon/v/eon/0.0.9/eon.js"></script>
+        <link type="text/css" rel="stylesheet" href="//pubnub.github.io/eon/v/eon/0.0.9/eon.css"/>
+
         <script src="@routes.Assets.versioned("js/hashChart.js")"></script>
 
     </body>
