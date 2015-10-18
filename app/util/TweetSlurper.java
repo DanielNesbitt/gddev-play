@@ -71,11 +71,10 @@ public class TweetSlurper {
 
         // These secrets should be read from a config file
         Authentication hosebirdAuth = new OAuth1(
-
-            "OGym96xdxDYASZ8nSfmyqAUrg",
-            "QCBgdffTns0kjNJz33J9yzH01CQ7vC3jzVkl6K8Cuj9Zzv6gKK",
-            "946181-KdoRhGBtp3KLUFMwdL0wx7wrbPZwHfxAIe8nCpn4D0S",
-            "9D2WwDOYngdqcNh6V8YEzp8Aj86LXJcGqzncHHc4Kf5f2"
+            System.getProperty("consumerKey"),
+            System.getProperty("consumerSecret"),
+            System.getProperty("token"),
+            System.getProperty("tokenSecret")
         );
 
         ClientBuilder builder = new ClientBuilder()

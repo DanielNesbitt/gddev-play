@@ -8,7 +8,7 @@ public final class Global extends GlobalSettings {
 
     @Override
     public void onStart(Application app) {
-
+        System.load("~/Desktop/api-key.properties");
     }
 
 }
