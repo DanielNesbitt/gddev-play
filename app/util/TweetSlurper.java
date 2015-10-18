@@ -52,55 +52,56 @@ public class TweetSlurper {
 
     // -------------------- Fire hose --------------------
 
-	private static Client startFirehose(Consumer<String> tagConsumer) throws Exception {
-		ObjectMapper mapper = new ObjectMapper();
-		Pattern hash = Pattern.compile("#\\w+");
+    private static Client startFirehose(Consumer<String> tagConsumer) throws Exception {
+        ObjectMapper mapper = new ObjectMapper();
+        Pattern hash = Pattern.compile("#\\w+");
 
-		/** Set up your blocking queues: Be sure to size these properly based on expected TPS of your stream */
-		BlockingQueue<String> msgQueue = new LinkedBlockingQueue<>(100000);
+        /** Set up your blocking queues: Be sure to size these properly based on expected TPS of your stream */
+        BlockingQueue<String> msgQueue = new LinkedBlockingQueue<>(100000);
 
-		/** Declare the host you want to connect to, the endpoint, and authentication (basic auth or oauth) */
-		Hosts hosebirdHosts = new HttpHosts(Constants.STREAM_HOST);
-		// Optional: set up some followings and track terms
-		List<String> terms = Lists.newArrayList("twitter", "api");
+        /** Declare the host you want to connect to, the endpoint, and authentication (basic auth or oauth) */
+        Hosts hosebirdHosts = new HttpHosts(Constants.STREAM_HOST);
+        // Optional: set up some followings and track terms
+        List<String> terms = Lists.newArrayList("twitter", "api");
 
-		StatusesFilterEndpoint hosebirdEndpoint = new StatusesFilterEndpoint()
-				.trackTerms(terms)
+        StatusesFilterEndpoint hosebirdEndpoint = new StatusesFilterEndpoint()
+            .trackTerms(terms)
 //        	.locations(Lists.newArrayList(new Location(new Location.Coordinate(-74d, 40d), new Location.Coordinate(-73d, 41d))))
-				;
+            ;
 
-		// These secrets should be read from a config file
-		Authentication hosebirdAuth = new OAuth1(
-			"OGym96xdxDYASZ8nSfmyqAUrg",
-			"QCBgdffTns0kjNJz33J9yzH01CQ7vC3jzVkl6K8Cuj9Zzv6gKK",
-			"946181-KdoRhGBtp3KLUFMwdL0wx7wrbPZwHfxAIe8nCpn4D0S",
-			"9D2WwDOYngdqcNh6V8YEzp8Aj86LXJcGqzncHHc4Kf5f2"
-		);
+        // These secrets should be read from a config file
+        Authentication hosebirdAuth = new OAuth1(
 
-		ClientBuilder builder = new ClientBuilder()
-			.name("Hosebird-Client-01")
-			.hosts(hosebirdHosts)
-			.authentication(hosebirdAuth)
-			.endpoint(hosebirdEndpoint)
-			.processor(new LineStringProcessor(msgQueue));
+            "OGym96xdxDYASZ8nSfmyqAUrg",
+            "QCBgdffTns0kjNJz33J9yzH01CQ7vC3jzVkl6K8Cuj9Zzv6gKK",
+            "946181-KdoRhGBtp3KLUFMwdL0wx7wrbPZwHfxAIe8nCpn4D0S",
+            "9D2WwDOYngdqcNh6V8YEzp8Aj86LXJcGqzncHHc4Kf5f2"
+        );
 
-		Client client = builder.build();
-		client.connect();
+        ClientBuilder builder = new ClientBuilder()
+            .name("Hosebird-Client-01")
+            .hosts(hosebirdHosts)
+            .authentication(hosebirdAuth)
+            .endpoint(hosebirdEndpoint)
+            .processor(new LineStringProcessor(msgQueue));
 
-		CompletableFuture.runAsync(Unchecked.runnable(() -> {
-			while (!client.isDone()) {
-				String message = msgQueue.take();
-				JsonNode tweet = mapper.readTree(message);
-				if (tweet.has("text")) {
-					String text = tweet.get("text").textValue();
-					Matcher m = hash.matcher(text);
-					while (m.find()) {
-						tagConsumer.accept(m.group());
-					}
-				}
-			}
-		}));
-		return client;
-	}
+        Client client = builder.build();
+        client.connect();
+
+        CompletableFuture.runAsync(Unchecked.runnable(() -> {
+            while (!client.isDone()) {
+                String message = msgQueue.take();
+                JsonNode tweet = mapper.readTree(message);
+                if (tweet.has("text")) {
+                    String text = tweet.get("text").textValue();
+                    Matcher m = hash.matcher(text);
+                    while (m.find()) {
+                        tagConsumer.accept(m.group());
+                    }
+                }
+            }
+        }));
+        return client;
+    }
 
 }
