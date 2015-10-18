@@ -125,7 +125,8 @@ public static Result list() {
         @code() {
 public Result user(long id) {
     User user = UserService.find(id);
-    return ok(Json.toJson(user));
+    JsonNode result = Json.toJson(user);
+    return ok(result);
 }
         }
     }
@@ -135,7 +136,7 @@ public Result user(long id) {
         @code() {
 public Result index() {
     response().setHeader("response", "response-header");
-    return ok(new File("public/index.txt"))
+    return ok(new File("public/index.bin"))
         .as("application/octet-stream");
 }
         }
