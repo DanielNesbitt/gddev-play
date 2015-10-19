@@ -2,7 +2,7 @@ package gddev;
 
 import java.lang.Integer;
 import java.util.ArrayDeque;
-import java.util.Collections;
+import static java.util.Collections.nCopies;
 import java.util.Deque;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -23,10 +23,7 @@ public final class StatBag {
 	// -------------------- Public --------------------
 
 	public final void add(Map<String, Integer> tweets) {
-		tweets.forEach((k,v) -> {
-			Deque<Integer> deque = counts.computeIfAbsent(k, s -> new ArrayDeque<>(Collections.nCopies(LIMIT - 1, 0)));
-			deque.add(v);
-		});
+		tweets.forEach((k,v) -> counts.computeIfAbsent(k, s -> new ArrayDeque<>(nCopies(LIMIT - 1, 0))).add(v));
 		counts.entrySet().removeIf(e -> {
 			if (!tweets.containsKey(e.getKey())) {
 				Deque<Integer> deque = e.getValue();
