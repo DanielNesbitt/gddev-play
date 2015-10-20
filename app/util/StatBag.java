@@ -17,11 +17,11 @@ public final class StatBag {
 
 	// -------------------- Variables --------------------
 
-	private final Map<String, Deque<Integer>> counts = new ConcurrentHashMap<>();
+	private final Map<String, Deque<Integer>> counts = new LinkedHashMap<>();
 
 	// -------------------- Public --------------------
 
-	public final List<String> add(Map<String, Integer> tweets) {
+	public final synchronized List<String> add(Map<String, Integer> tweets) {
         List<String> removals = new ArrayList<>();
 		tweets.forEach((k,v) -> push(counts.computeIfAbsent(k, s -> new ArrayDeque<>(nCopies(LIMIT, 0))), v));
 		counts.entrySet().removeIf(e -> {
@@ -37,7 +37,7 @@ public final class StatBag {
         return removals;
     }
 
-    public final Object[] columns() {
+    public final synchronized Object[] columns() {
         return counts.entrySet().stream()
             .map(e -> {
                 List<Object> column = new ArrayList<>();
