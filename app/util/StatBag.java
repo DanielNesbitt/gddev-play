@@ -1,11 +1,12 @@
-package gddev;
+package util;
 
 import java.lang.Integer;
 import java.util.ArrayDeque;
-import static java.util.Collections.nCopies;
 import java.util.Deque;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static java.util.Collections.nCopies;
 
 /**
  * @author James Cooper
@@ -23,16 +24,19 @@ public final class StatBag {
 	// -------------------- Public --------------------
 
 	public final void add(Map<String, Integer> tweets) {
-		tweets.forEach((k,v) -> counts.computeIfAbsent(k, s -> new ArrayDeque<>(nCopies(LIMIT - 1, 0))).add(v));
+		tweets.forEach((k,v) -> push(counts.computeIfAbsent(k, s -> new ArrayDeque<>(nCopies(LIMIT, 0))), v));
 		counts.entrySet().removeIf(e -> {
 			if (!tweets.containsKey(e.getKey())) {
-				Deque<Integer> deque = e.getValue();
-				deque.add(0);
-				deque.removeFirst();
-				return !deque.stream().filter(i -> i > 0).findAny().isPresent();
+				push(e.getValue(), 0);
+				return !e.getValue().stream().filter(i -> i > 0).findAny().isPresent();
 			}
 			return false;
 		});
+	}
+
+	private void push(Deque<Integer> deque, int value) {
+		deque.add(value);
+		deque.removeFirst();
 	}
 
 }
