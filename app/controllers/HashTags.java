@@ -6,8 +6,10 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.WebSocket;
+import util.StatBag;
 import util.TweetSlurper;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
@@ -22,16 +24,19 @@ public class HashTags extends Controller {
     public WebSocket<JsonNode> ws() {
         return WebSocket.whenReady((in, out) -> {
             TweetSlurper slurper = new TweetSlurper();
+            StatBag stats = new StatBag();
             CompletableFuture<Void> future = CompletableFuture.runAsync(() -> {
-                Map<String, Integer> oldHashes = slurper.gatherStats(0, 5);
                 while (true) {
                     Map<String, Integer> hashes = slurper.gatherStats(0, 5);
-                    oldHashes.keySet().removeAll(hashes.keySet());
-                    out.write(toJson(hashes, oldHashes));
+                    List<String> removals = stats.add(hashes);
 
-                    oldHashes = hashes;
+                    ObjectNode result = Json.newObject();
+                    result.set("columns", Json.toJson(stats.columns()));
+                    result.set("unload", Json.toJson(removals));
+
+                    out.write(result);
                     try {
-                        Thread.sleep(250);
+                        Thread.sleep(750);
                     } catch (InterruptedException e) {
                         throw new CancellationException();
                     }

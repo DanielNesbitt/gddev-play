@@ -16,7 +16,7 @@ public final class TweetBag {
 
     // -------------------- Statics --------------------
 
-    private static final long EXPIRATION = 10_000;
+    private static final long EXPIRATION = 60_000;
 
     // -------------------- Variables --------------------
 
@@ -45,7 +45,7 @@ public final class TweetBag {
             .sorted(Comparator.comparingInt(HashTag::count).reversed())
             .skip(skip)
             .limit(limit)
-            .collect(Collectors.toMap(t -> t.label(position.getAndIncrement()), HashTag::count, (l, r) -> l, LinkedHashMap::new));
+            .collect(Collectors.toMap(HashTag::tag, HashTag::count, (l, r) -> l, LinkedHashMap::new));
     }
 
     // -------------------- Private --------------------
@@ -93,8 +93,8 @@ public final class TweetBag {
             this.count = count;
         }
 
-        public String label(int position) {
-            return position + ". " + tag;
+        public String tag() {
+            return tag;
         }
 
         public int count() {
