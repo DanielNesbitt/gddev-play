@@ -36,7 +36,7 @@ public class HashTags extends Controller {
 
                     out.write(result);
                     try {
-                        Thread.sleep(750);
+                        Thread.sleep(2000);
                     } catch (InterruptedException e) {
                         throw new CancellationException();
                     }

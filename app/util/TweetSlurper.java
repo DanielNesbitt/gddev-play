@@ -4,8 +4,12 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import com.twitter.hbc.ClientBuilder;
-import com.twitter.hbc.core.*;
+import com.twitter.hbc.core.Client;
+import com.twitter.hbc.core.Constants;
+import com.twitter.hbc.core.Hosts;
+import com.twitter.hbc.core.HttpHosts;
 import com.twitter.hbc.core.endpoint.StatusesFilterEndpoint;
+import com.twitter.hbc.core.endpoint.StatusesSampleEndpoint;
 import com.twitter.hbc.core.processor.LineStringProcessor;
 import com.twitter.hbc.httpclient.auth.Authentication;
 import com.twitter.hbc.httpclient.auth.OAuth1;
@@ -64,9 +68,10 @@ public class TweetSlurper {
         // Optional: set up some followings and track terms
         List<String> terms = Lists.newArrayList("twitter", "api");
 
+        StatusesSampleEndpoint endpoint = new StatusesSampleEndpoint();
         StatusesFilterEndpoint hosebirdEndpoint = new StatusesFilterEndpoint()
             .trackTerms(terms)
-//        	.locations(Lists.newArrayList(new Location(new Location.Coordinate(-74d, 40d), new Location.Coordinate(-73d, 41d))))
+//        	.locations(Lists.newArrayList(new Location(new Location.Coordinate(5.097656, 43.992815), new Location.Coordinate(15.688477, 50.958427))))
             ;
 
         // These secrets should be read from a config file
@@ -81,7 +86,7 @@ public class TweetSlurper {
             .name("Hosebird-Client-01")
             .hosts(hosebirdHosts)
             .authentication(hosebirdAuth)
-            .endpoint(hosebirdEndpoint)
+            .endpoint(endpoint)
             .processor(new LineStringProcessor(msgQueue));
 
         Client client = builder.build();

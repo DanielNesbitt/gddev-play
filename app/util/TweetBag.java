@@ -16,7 +16,7 @@ public final class TweetBag {
 
     // -------------------- Statics --------------------
 
-    private static final long EXPIRATION = 60_000;
+    private static final long EXPIRATION = 5 * 60_000;
 
     // -------------------- Variables --------------------
 
