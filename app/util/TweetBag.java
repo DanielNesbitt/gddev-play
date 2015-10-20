@@ -39,7 +39,6 @@ public final class TweetBag {
     }
 
     public final Map<String, Integer> tweetCounts(int skip, int limit) {
-        AtomicInteger position = new AtomicInteger(skip + 1);
         return map.values().stream()
             .map(Counter::toTag)
             .sorted(Comparator.comparingInt(HashTag::count).reversed())
