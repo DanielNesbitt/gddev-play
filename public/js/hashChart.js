@@ -1,6 +1,9 @@
 var chart = c3.generate({
     data: {
         columns: []
+    },
+    tooltip: {
+        show: false
     }
 });
 

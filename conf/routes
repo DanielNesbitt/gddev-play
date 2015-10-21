@@ -4,7 +4,6 @@
 
 # Home page
 GET           /                controllers.Application.index()
-GET           /demo            controllers.Application.demo()
 GET           /ws              controllers.HashTags.ws()
 
 #GET           /user            controllers.Users.users()
